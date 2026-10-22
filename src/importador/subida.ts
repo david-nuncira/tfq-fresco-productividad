@@ -135,12 +135,15 @@ export async function ejecutarImportacion(
       duplicadas: number
       conflictos: number
       errores: ErrorFila[] | null
-    }>('fn_importar', { p_lote: loteId, p_filas: trozo })
+    }>('fn_importar', { p_lote: loteId, p_filas: trozo, p_bloque: i / TAMANO_LOTE_IMPORTACION })
     resultado.nuevas += r.nuevas
     resultado.duplicadas += r.duplicadas
     resultado.conflictos += r.conflictos
     if (r.errores) resultado.errores.push(...r.errores)
     opciones.onProgreso?.(Math.min(i + TAMANO_LOTE_IMPORTACION, total), total)
+  }  if (resultado.errores.length > 0) {
+    const detalle = resultado.errores.slice(0, 5).map((e) => `fila ${e.fila}: ${e.error}`).join('; ')
+    throw new Error(`${resultado.errores.length} filas no pudieron guardarse. Primeros errores: ${detalle}. El lote sigue pendiente y no cuenta en los indicadores.`)
   }
 
   await rpcConReintentos('fn_confirmar_lote', { p_lote: loteId })
