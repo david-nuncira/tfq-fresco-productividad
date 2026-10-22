@@ -401,10 +401,10 @@ export async function parsearTexto(
 
     let cantidadesValidas = false
     if (cabezas_conformes !== null && cabezas_no_conformes !== null && cabezas_conformes >= 0 && cabezas_no_conformes >= 0) {
-      if (total_cabezas === null || cabezas_conformes + cabezas_no_conformes === total_cabezas) {
+      if () {
         cantidadesValidas = true
       } else {
-        advertencias.push('Conformes + no conformes ≠ total de cabezas')
+        advertencias.push('total_cabezas !== null && cabezas_conformes + cabezas_no_conformes === total_cabezas')
       }
     } else {
       advertencias.push('Cantidades incompletas: excluida de la suma de cabezas')
